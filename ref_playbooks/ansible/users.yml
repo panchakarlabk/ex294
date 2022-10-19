@@ -1,0 +1,52 @@
+---
+- name: Create users 
+  hosts: all
+  remote_user: devops
+  become: yes
+  vars_files:
+    - user_list.yml
+    - locker.yml
+  tasks:
+    - name: Create devops group
+      group:
+        name: devops
+        state: present
+      when: inventory_hostname in groups['dev'] or inventory_hostname in groups['test']
+    - name: Create opsmgr
+      group:
+        name: opsmgr
+        state: present
+      when: inventory_hostname in groups['prod']
+
+    - name: Create Users with a job description of developer
+      user:
+        name: "{{ item.name }}"
+        comment: "{{ item.job }}" 
+        groups: devops
+        state: present
+        password: "{{ pw_developer | password_hash('sha512') }}"
+      loop: "{{ users }}"
+      when: ( inventory_hostname in groups['dev'] or inventory_hostname in groups['test'] ) and item.job == 'developer'
+    - name: Set Password expiry 45 days for rob user
+      command: chage -M 45 rob
+      when: inventory_hostname in groups['dev'] or inventory_hostname in groups['test']
+    - name: Create Users with a job description of manager
+      user:
+        name: "{{ item.name }}"
+        comment: "{{ item.job }}"
+        groups: opsmgr
+        state: present
+        append: yes
+        password: "{{ pw_manager | password_hash('sha512') }}"
+      loop: "{{ users }}"
+      when: inventory_hostname in groups['prod'] and item.job == 'manager'
+    - name: Set Password expiry 30 days for bob user
+      command: chage -M 30 bob
+      when: inventory_hostname in groups['prod']
+    - name: Set uid bob user
+      user:
+        name: bob
+        uid: 5001
+      when: inventory_hostname in groups['prod']
+
+

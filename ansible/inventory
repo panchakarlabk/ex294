@@ -1,0 +1,17 @@
+[dev]
+servera
+
+[test]
+serverb
+
+[prod]
+serverb
+serverc
+
+[balancers]
+serverd
+
+[webservers:children]
+prod
+
+

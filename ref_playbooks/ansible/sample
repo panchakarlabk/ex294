@@ -1,0 +1,6 @@
+---
+- name: 
+  hosts: all
+  remote_user: devops
+  become: yes
+  tasks:

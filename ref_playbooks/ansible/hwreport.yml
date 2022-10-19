@@ -1,0 +1,50 @@
+---
+- name: hwreport 
+  hosts: all
+  remote_user: devops
+  become: yes
+  tasks:
+    - name: Download hwreport.empty
+      get_url:
+        url: http://content.example.com/rh294/hwreport.empty
+        dest: /root/hwreport.txt
+        force: yes
+    - name: replace inventoryhostname
+      replace:
+        path: /root/hwreport.txt 
+        regexp: "inventoryhostname"
+        replace: "{{ inventory_hostname }}"
+    - name: replace total_memory
+      replace:
+        path: /root/hwreport.txt 
+        regexp: "total_memory"
+        replace: "{{ ansible_memtotal_mb }}"
+    - name: replace bios_version
+      replace:
+        path: /root/hwreport.txt 
+        regexp: "bios_version"
+        replace: "{{ ansible_bios_version }}"
+    - name: replace ansible_vda_size
+      replace:
+        path: /root/hwreport.txt 
+        regexp: "ansible_vda_size"
+        replace: "{{ ansible_devices.vda.size }}"
+      when: ansible_devices.vda is defined
+    - name: replace ansible_vdb_size
+      replace:
+        path: /root/hwreport.txt 
+        regexp: "ansible_vdb_size"
+        replace: "{{ ansible_devices.vdb.size }}"
+      when: ansible_devices.vdb is defined
+    - name: replace ansible_vda_size if not available
+      replace:
+        path: /root/hwreport.txt 
+        regexp: "ansible_vda_size"
+        replace: "NONE"
+      when: ansible_devices.vda is not defined
+    - name: replace ansible_vdb_size if not available
+      replace:
+        path: /root/hwreport.txt 
+        regexp: "ansible_vdb_size"
+        replace: "NONE"
+      when: ansible_devices.vdb is not defined

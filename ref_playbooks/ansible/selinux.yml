@@ -1,0 +1,10 @@
+---
+- name: SELinux
+  hosts: all
+  remote_user: devops
+  become: yes
+  vars:
+    selinux_policy: targeted
+    selinux_state: enforcing
+  roles:
+    - rhel-system-roles.selinux

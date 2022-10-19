@@ -1,0 +1,24 @@
+---
+- name: Install the php and mariadb pkgs
+  hosts: all
+  remote_user: devops
+  become: yes
+  tasks:
+    - name: Install the php and mariadb
+      yum:
+        name: 
+          - php
+          - mariadb
+        state: latest
+      when: inventory_hostname in groups['dev'] or inventory_hostname in groups['test'] or inventory_hostname in groups['prod']
+    - name: Install the RPM Development tools
+      yum:
+        name: "@RPM Development Tools"
+        state: present
+      when: inventory_hostname in groups['dev']
+
+    - name: Update all packages to the latest version 
+      yum:
+        name: '*'
+        state: latest
+      when: inventory_hostname in groups['dev']

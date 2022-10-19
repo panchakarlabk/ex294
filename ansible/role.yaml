@@ -1,0 +1,15 @@
+---
+
+- name: install http using apache roles
+
+  hosts: all
+
+  tasks:
+
+    - name: deploy role to webservers
+
+      include_role:
+
+        name: apache
+
+      when: inventory_hostname in groups['webservers']

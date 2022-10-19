@@ -1,0 +1,13 @@
+---
+
+packages:
+
+  - httpd
+
+  - firewalld
+
+services:
+
+  - httpd
+
+  - firewalld

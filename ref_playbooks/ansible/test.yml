@@ -1,0 +1,8 @@
+---
+- name: 
+  hosts: serverb
+  remote_user: devops
+  become: yes
+  tasks:
+    - name: scp command
+      command: scp root@serverb:/root/anaconda-ks.cfg /var/tmp

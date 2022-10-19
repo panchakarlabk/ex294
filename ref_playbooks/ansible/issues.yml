@@ -1,0 +1,21 @@
+---
+- name: Modify file content 
+  hosts: all
+  remote_user: devops
+  become: yes
+  tasks:
+    - name: On hosts in the dev host group, the line reads Development
+      copy:
+        content: Development
+        dest: /etc/issue
+      when: inventory_hostname in groups['dev']
+    - name: On hosts in the test host group, the line reads Test
+      copy:
+        content: Test
+        dest: /etc/issue
+      when: inventory_hostname in groups['test']
+    - name: On hosts in the prod host group, the line reads Production
+      copy:
+        content: Production
+        dest: /etc/issue
+      when: inventory_hostname in groups['prod']

@@ -1,0 +1,6 @@
+# Hardware reports
+HOST=inventoryhostname
+MEMORY=total_memory
+BIOS=bios_version
+VDA_SIZE=ansible_vda_size
+VDB_SIZE=ansible_vdb_size

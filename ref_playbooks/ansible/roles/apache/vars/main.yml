@@ -1,0 +1,9 @@
+---
+# vars file for roles/apache
+pkgs:
+  - httpd
+  - firewalld
+srvs:
+  - httpd
+  - firewalld
+fsrule: http

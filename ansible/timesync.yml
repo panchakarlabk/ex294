@@ -1,0 +1,11 @@
+---
+- name: use times sync role
+  hosts: all
+  vars:
+    timesysnc_ntp_providers: chrony
+    timesysnc_ntp_servers:
+      - hostname: 172.25.254.254
+        iburst: yes
+  roles:
+    - rhel-system-roles.timesync
+     

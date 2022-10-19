@@ -1,0 +1,13 @@
+---
+- name: Timesync role play
+  hosts: all
+  remote_user: devops
+  become: yes
+  vars:
+    timesync_ntp_provider: chrony
+    timesync_ntp_servers:
+      - hostname: 172.25.254.254
+        iburst: yes
+  roles:
+    - rhel-system-roles.timesync
+

@@ -1,0 +1,8 @@
+---
+users:
+  - name: rob
+    job: developer
+  - name: bob
+    job: manager
+  - name: smith
+    job: developer

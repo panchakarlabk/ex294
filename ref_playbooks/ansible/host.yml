@@ -1,0 +1,11 @@
+---
+- name: Generate host file
+  hosts: all
+  remote_user: devops
+  become: yes
+  tasks:
+    - name: Process Jinja Template
+      template:
+        src: hosts.j2
+        dest: /etc/myhosts
+      when: inventory_hostname in groups['dev']

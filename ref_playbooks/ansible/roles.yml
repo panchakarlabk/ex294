@@ -1,0 +1,15 @@
+---
+- name: Deploy balancer role
+  hosts: all
+  remote_user: devops
+  become: yes
+  tasks:
+    - name: use balancer role against balancers group
+      include_role:
+        name: balancer
+      when: inventory_hostname in groups['balancers']
+
+    - name: use balancer role against webservers  group
+      include_role:
+        name: phpinfo
+      when: inventory_hostname in groups['webservers']

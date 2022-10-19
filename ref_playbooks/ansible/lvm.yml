@@ -1,0 +1,29 @@
+---
+- name: Create LVM
+  hosts: all
+  remote_user: devops
+  become: yes
+  tasks:
+    - debug:
+        msg: "Volume group does not exist"
+      when: ansible_lvm.vgs.research is not defined
+    - name: Create 1500 MiB LVM
+      lvol:
+        vg: research
+        lv: data
+        size: 1500
+      when: ansible_lvm.vgs.research is defined and ansible_lvm.vgs.research.size_g > "1.5"
+    - debug:
+        msg: "Could not create logical volume at that size"
+      when: ansible_lvm.vgs.research is defined and ansible_lvm.vgs.research.size_g < "1.5"
+    - name: Create 800 MiB LVM
+      lvol:
+        vg: research
+        lv: data
+        size: 800
+      when: ansible_lvm.vgs.research is defined and ansible_lvm.vgs.research.size_g < "1.5"
+    - name: Create a ext4 filesystem on /dev/research/data
+      filesystem:
+        fstype: ext4
+        dev: /dev/research/data
+      when: ansible_lvm.vgs.research is defined

@@ -1,0 +1,49 @@
+---
+# tasks file for roles/apache
+- name: install httpd
+
+  yum:
+
+    name: "{{ item }}"
+
+    state: latest
+
+  loop: "{{ packages }}"
+
+- name: start service
+
+  service:
+
+    name: "{{ item }}"
+
+    enabled: yes
+
+    state: started
+
+  loop: "{{ services }}"
+
+- name: enabling in firewall
+
+  firewalld:
+
+    zone: public
+
+    service: http
+
+    state: enabled
+
+    immediate: true
+
+    permanent: true
+
+- name: copy template 
+
+  template:
+
+    dest: /var/www/html/index.html
+
+    src: index.html.j2
+
+  notify: restart httpd
+
+

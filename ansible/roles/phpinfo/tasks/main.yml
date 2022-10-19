@@ -1,0 +1,8 @@
+---
+# tasks file for info
+- name: copy
+  template:
+    src: hello.php.j2
+    dest: /var/www/html/hello.php
+  notify: restart httpd
+
